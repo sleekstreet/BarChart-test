@@ -1,0 +1,41 @@
+table {
+  width: 100%; }
+
+.box {
+  border: 1px solid #D0D0D0; }
+  .box .header {
+    border-bottom: 1px solid #D0D0D0;
+    padding: 5px 10px;
+    background: #eee;
+    /* Old browsers */
+    background: -moz-linear-gradient(top, #eee 0%, #ccc 100%);
+    /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, #eee 0%, #ccc 100%);
+    /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, #eee 0%, #ccc 100%);
+    /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */ }
+  .box form {
+    border: 1px solid #D0D0D0; }
+    .box form input[type=text] {
+      width: 200px;
+      display: inline-block;
+      border: none; }
+    .box form button {
+      display: inline-block; }
+
+.error {
+  color: #f00; }
+
+.whiteBg {
+  background-color: #fff; }
+
+.grayBg {
+  background-color: #ddd; }
+
+#stockFeeds button {
+  border: none;
+  background-color: transparent; }
+#stockFeeds td {
+  padding: 8px 10px; }
+
+/*# sourceMappingURL=style.css.map */
