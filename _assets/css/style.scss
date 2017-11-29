@@ -12,7 +12,7 @@ table{width:100%}
 	background: linear-gradient(to bottom, $col1 0%,$col2 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 	
 }
-
+.red{color:$error;margin:0 10px}
 .box{border:$box;
 	
 	.header{border-bottom:$box;padding:5px 10px;@include linear-gradient(#eee, #ccc);}
@@ -25,7 +25,11 @@ table{width:100%}
 .whiteBg{background-color:$white}
 .grayBg{background-color:$gray}
 
-#stockFeeds{
+
+table{
 	button{border:none;background-color:transparent;}
 	td{padding:8px 10px}
+	thead i{padding: 0 5px;}
+	thead span{color:blue;}
+	thead span:hover{text-decoration:underline;cursor:pointer}
 }

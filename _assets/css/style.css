@@ -1,6 +1,10 @@
 table {
   width: 100%; }
 
+.red {
+  color: #f00;
+  margin: 0 10px; }
+
 .box {
   border: 1px solid #D0D0D0; }
   .box .header {
@@ -32,10 +36,17 @@ table {
 .grayBg {
   background-color: #ddd; }
 
-#stockFeeds button {
+table button {
   border: none;
   background-color: transparent; }
-#stockFeeds td {
+table td {
   padding: 8px 10px; }
+table thead i {
+  padding: 0 5px; }
+table thead span {
+  color: blue; }
+table thead span:hover {
+  text-decoration: underline;
+  cursor: pointer; }
 
 /*# sourceMappingURL=style.css.map */

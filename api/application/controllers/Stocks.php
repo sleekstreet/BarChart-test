@@ -30,10 +30,15 @@ class Stocks extends REST_Controller {
 	public function add_post(){
 		$inputSym = $this->post('stockSymbol');
 		$hash = $this->post('hash');
-		$result = $this->stock_Model->updateUser($hash, $inputSym, "add");
-		$output = $this->stock_Model->viewQuotes($result[0]);
+		$check = $this->stock_Model->updateUser($hash, 0,0);
+		$checkArr = (array) $check[0];
+		if($checkArr[(string) strtoupper($inputSym)]==="1"){$this->response("not added");}
+		else{$result = $this->stock_Model->updateUser($hash, $inputSym, "add");
+			$output = $this->stock_Model->viewQuotes($result[0]);
+			$this->response(json_encode($output));
+		}
 
-		$this->response(json_encode($output));
+		
 	}
 	public function delete_post(){
 		$inputSym = $this->post('stockSymbol');

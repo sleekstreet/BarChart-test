@@ -4,8 +4,10 @@
 	<meta charset="utf-8">
 	<title>BarChart Test</title>
 
+
 	<link rel="stylesheet" href="_assets/css/style.css"/>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+	<link rel="stylesheet" href="_assets/css/font-awesome-4.7.0/css/font-awesome.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://www.atlasestateagents.co.uk/javascript/tether.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
@@ -23,9 +25,15 @@
 			    	<input type="text" id="inlineFormInput" name="stockSymbol">
 			    	<button>Add Symbol</button>
 			    </form>
+			    <small><i class="red" id="message"></i></small>
 		  	</div>
 		</div>
-		<div id="stockFeeds"></div>
+		<div id="stockFeeds">
+			<table>
+				<thead id="fields"></thead>
+				<tbody></tbody>
+			</table>
+		</div>
 	</div>
 	<footer>
 		
