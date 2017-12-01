@@ -17,7 +17,7 @@ class Stock_Model extends CI_Model{
 	function login($usr, $pass){
 		$query = $this->userQuery();
 		$query.=" `password`='".$pass."' AND `username`='".$usr."'";
-		$output = $this->db->query($this->query);
+		$output = $this->db->query($query);
 
 		if($output->result() === null){return null;}
 		else{ $result['hash'] = password_hash($pass, PASSWORD_DEFAULT);
