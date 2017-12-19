@@ -1,16 +1,18 @@
 {
   "name": "barchart-test",
   "version": "1.0.0",
-  "description": "This is my cool app",
-  "main": "_asset/js/app.js",
+  "description": "This is my cool app that I am adding new feature to.",
+  "main": "_asset/js/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel src -d lib"
   },
   "author": "Me",
   "license": "MIT",
   "dependencies": {
     "bootstrap": "^4.0.0-alpha.6",
-    "jquery": "^3.2.1"
+    "jquery": "^3.2.1",
+    "sinon": "^4.1.3"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

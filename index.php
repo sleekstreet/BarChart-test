@@ -30,7 +30,7 @@
 		</div>
 		<div id="stockFeeds">
 			<table>
-				<thead id="fields"></thead>
+				<thead id="fields"><th><a href="#" data-field="symbol" data-order=""> Symbol</a><i class="" id="symbolArow"></i></th><th><a href="#" data-field="name" data-order="">Symbol Name</a><i id="nameArow"></i></th><th><a href="#" data-field="last" data-order="">Last Price</a><i id="lastArow"></i></th><th><a href="#" data-field="change" data-order="">Change</a><i id="changeArow"></i></th><th><a href="#" data-field="pctchange" data-order="">%Change</a><i id="pctchangeArow"></i></th><th><a href="#" data-field="volume" data-order="">Volume</a><i id="volumeArow"></i></th><th><a href="#" data-field="tradetime" data-order="">Time</a><i id="tradetimeArow"></i></th><th></th></thead>
 				<tbody></tbody>
 			</table>
 		</div>

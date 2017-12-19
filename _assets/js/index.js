@@ -1,6 +1,8 @@
-var _this = this;
 
-var sortJSON = function () {
+//import {assert, spy, stub} from './node_modules/sinon/lib/sinon.js';
+//var sinon = require('sinon');
+
+var sortJSON = () => {
 	// This is the sort machine of the watchlist. It saves the data in a closure and sorts at will by hyper link triggers on the title head of the "#stockFeeds" area
 	let dataJSON = {},
 	    order = "acend",
@@ -10,11 +12,11 @@ var sortJSON = function () {
 	function datafeed(data) {
 		dataJSON = data;
 	}
-	function alpha(col, order) {
+	function alpha() {
 		dataJSON.sort((a, b) => {
 			let nameA = a[col].toUpperCase(),
 			    nameB = b[col].toUpperCase(); // ignoring upper and lowercase
-			//console.log("nameA: "+nameA+" nameB: "+nameB);
+
 			if (nameA < nameB && order === "acend") {
 				return -1;
 			} else if (nameA < nameB && order === "decend") {
@@ -27,84 +29,108 @@ var sortJSON = function () {
 				return 0;
 			} // names must be equal
 		});
-		console.log(dataJSON);
+
 		parseJSON(dataJSON);
 	}
-	function numeric(col, order) {
-		/*let newJSON = mergeSort(dataJSON);
-  
-  	Using the merge sort function made by Alexander Kondov in his artical on "Programming with JS: Merge Sort" 
-  // Split the array into halves and merge them recursively 
-  function mergeSort (arr) {
-    if (arr.length === 1) {
-      // return once we hit an array with a single item
-      return arr
-    }
-  	  const middle = Math.floor(arr.length / 2) // get the middle item of the array rounded down
-    const left = arr.slice(0, middle) // items on the left side
-    const right = arr.slice(middle) // items on the right side
-  	  return merge(
-      mergeSort(left),
-      mergeSort(right)
-    )
-  }
-  	// compare the arrays item by item and return the concatenated result
-  function merge (left, right) {
-    let result = []
-    let indexLeft = 0
-    let indexRight = 0
-  	  while (indexLeft < left.length && indexRight < right.length) {
-      if (left[indexLeft] < right[indexRight]) {
-        result.push(left[indexLeft])
-        indexLeft++
-      } else {
-        result.push(right[indexRight])
-        indexRight++
-      }
-    }
-  	  return result.concat(left.slice(indexLeft)).concat(right.slice(indexRight))
-  }
-  console.log(newJSON);
-  parseJSON(newJSON);
-  */
-		//My original sort. It's unstable in some browsers
-		dataJSON.sort((a, b) => {
-			console.log("numberA: " + a[col] + " numberB: " + b[col]);
-			if (orderSign = "acend") {
-				return parseFloat(a[col]) + parseFloat(b[col]);
-			} else {
-				return parseFloat(a[col]) - parseFloat(b[col]);
+	function numeric() {
+
+		let newJSON = mergeSort(dataJSON, order);
+
+		//	Using the merge sort idea I found reading Alexander Kondov's article on "Programming with JS: Merge Sort" 
+		// Split the array into halves and merge them recursively 
+		function mergeSort(arr, order) {
+
+			if (arr.length === 1) {
+				// return once we hit an array with a single item
+				return arr;
 			}
-		});
-		parseJSON(dataJSON);
+
+			const middle = Math.floor(arr.length / 2); // get the middle item of the array rounded down
+			const left = arr.slice(0, middle); // items on the left side
+			const right = arr.slice(middle); // items on the right side
+
+			return merge(mergeSort(left, order), mergeSort(right, order), order, col);
+		}
+
+		// compare the arrays item by item and return the concatenated result
+		function merge(left, right, order, col) {
+			let result = [],
+			    indexLeft = 0,
+			    indexRight = 0,
+			    output;
+
+			if (order === "decend") {
+				while (indexLeft < left.length && indexRight < right.length) {
+
+					if (parseFloat(left[indexLeft][col]) > parseFloat(right[indexRight][col])) {
+						result.push(left[indexLeft]);
+						indexLeft++;
+					} else {
+						result.push(right[indexRight]);
+						indexRight++;
+					}
+
+					output = result.concat(left.slice(indexLeft)).concat(right.slice(indexRight));
+				}
+			} else {
+				while (indexLeft < left.length && indexRight < right.length) {
+
+					if (parseFloat(left[indexLeft][col]) < parseFloat(right[indexRight][col])) {
+						result.push(left[indexLeft]);
+						indexLeft++;
+					} else {
+						result.push(right[indexRight]);
+						indexRight++;
+					}
+
+					output = result.concat(left.slice(indexLeft)).concat(right.slice(indexRight));
+				}
+			}
+
+			return output;
+		}
+
+		parseJSON(newJSON);
+
+		//My original sort. It has unstable Numeric output in some browsers. This is why I am creating a better wheel that works everywhere.
+		/*dataJSON.sort((a,b)=>{console.log("numberA: "+a[col]+" numberB: "+b[col]);
+  	if (orderSign = "acend"){return parseFloat(a[col]) + parseFloat(b[col]);}
+  	else{return parseFloat(a[col]) - parseFloat(b[col]);}
+  })
+  parseJSON(dataJSON);
+  */
 	}
-	return { //These first two methods just set the internal properties to the user's viewing criteria
-		acend: function (column, type) {
-			order = "acend";
-			sortType = type;
-			col = column;
-			console.log("data in closure: " + order + " " + sortType + " " + col + " Called acend");
-		},
-		decend: function (column, type) {
-			order = "decend";
-			sortType = type;
-			col = column;
-			console.log("data in closure: " + order + " " + sortType + " " + col + " Called decend");
-		}, //This method saves/updates the data used to sort 
+	return {
+		//This method saves/updates the data used to sort 
+		status: function () {
+			return [order, col];
+		}, //	This method just updates the json data we use in the sort.
 		populate: function (data) {
 			datafeed(data);
-			//console.log("data in closure: "+dataJSON);
 		}, //This method calls the functions and feeds the correct sort data to get the job done.
-		display: function () {
-			if (sortType === "alpha") {
-				alpha(col, order);
+		display: function (column, type) {
+
+			if (column === col && order === "acend") {
+				order = "decend";
+			} else if (column !== col) {
+				order = "acend";col = column;
 			} else {
-				numeric(col, order);
+				order = "acend";
+			}
+
+			if (type === "alpha") {
+				alpha();
+			} else {
+				numeric();
 			}
 		}
 
 	};
 };
+
+// Sinon Test
+
+//var sortJSONspy = sinon.spy(sortJSON, 'numeric');
 
 /*******************************
  * Create cookie with javascript
@@ -143,7 +169,6 @@ function parseJSON(dataJSON) {
 	if (typeof dataJSON === 'string') {
 		$('#stockFeeds').html(dataJSON);
 	} else {
-		displayHead = '<td><a href="#" data-field="symbol" data-order=""> Symbol</a><i class="fa fa-caret-down" id="symbolArow"></i></td><td><a href="#" data-field="name" data-order="">Symbol Name</a><i id="nameArow"></i></td><td><a href="#" data-field="last" data-order="">Last Price</a><i id="lastArow"></i></td><td><a href="#" data-field="change" data-order="">Change</a><i id="changeArow"></i></td><td><a href="#" data-field="pctchange" data-order="">%Change</a><i id="pctchangeArow"></i></td><td><a href="#" data-field="volume" data-order="">Volume</a><i id="volumeArow"></i></td><td><a href="#" data-field="tradetime" data-order="">Time</a><i id="tradetimeArow"></i></td><td></td>';
 		dataJSON.map(v => {
 			if (c === 0) style = 'grayBg';else {
 				style = 'whiteBg';
@@ -155,7 +180,6 @@ function parseJSON(dataJSON) {
 			}
 		});
 
-		$('#stockFeeds thead').html(displayHead);
 		$('#stockFeeds tbody').html(displayBody);
 	}
 	if (dataJSON === null) {
@@ -166,37 +190,26 @@ function parseJSON(dataJSON) {
 
 jQuery($ => {
 
-	var sortData = sortJSON(); //Bring in the sorting function machine to use within the jQuery 
+	let sortData = sortJSON(),
+	    //Bring in the sorting function machine to use within the jQuery 
+	cookie = retrieve_cookie('StUsr');
+	checkOrder(null);
 
-	let cookie = retrieve_cookie('StUsr'),
-	    a = function (field) {
-		//ascending set up function
-		$("#stockFeeds i").removeClass();
-		$("#stockFeeds #" + field + "Arow").addClass("fa fa-caret-down");
-		if (field === "symbol" || field === "name") {
-			sortData.acend(field, "alpha");
-			sortData.display();
-		} else {
-			sortData.acend(field, "numeric");sortData.display();
-		}
-	},
-	    b = function (field) {
-		//descending set up function
-		$("#stockFeeds i").removeClass();
-		$("#stockFeeds #" + field + "Arow").addClass("fa fa-caret-up");
-		if (field === "symbol" || field === "name") {
-			sortData.decend(field, "alpha");
-			sortData.display();
-		} else {
-			sortData.decend(field, "numeric");sortData.display();
-		}
-	};
 	//Toggle the asending and desending sort functions
 	$("#fields").on("click", "a", e => {
 		e.preventDefault();
-		console.log(e);
-		let field = e.currentTarget.dataset.field;
-		return (_this.tog = !_this.tog) ? a(field) : b(field);
+
+		$("#stockFeeds i").removeClass();
+
+		let field = e.currentTarget.dataset.field,
+		    sortStatus = sortData.status();
+
+		if (field === "symbol" || field === "name") {
+			sortData.display(field, "alpha");
+		} else {
+			sortData.display(field, "numeric");
+		}
+		checkOrder(field);
 	});
 
 	//Checking the cookie to see if it's established and valid. If not go to login modal
@@ -204,12 +217,12 @@ jQuery($ => {
 		$('#LoginModal').modal('show');
 	} else {
 
-		let jqxhr = $.post("../barchart-test/api/index.php/stocks/QuoteView", { "CookieVal": cookie }).done().fail(() => {
-			$('#stockFeeds').html("Server Error");
+		let jqxhr = $.post("../barchart-test/api/index.php/stocks/QuoteView", { "CookieVal": cookie }).done(() => {}).fail(() => {
+			$('#stockFeeds').html("Server Error Connection may not have been established");
 		}).always(data => {
 			let dataJSON = JSON.parse(data);
 			sortData.populate(dataJSON); //populates the sorter with our new data from the database
-			sortData.display(); //This popoerly
+			sortData.display(); // Display Data Using previous settings
 		});
 	}
 
@@ -220,32 +233,31 @@ jQuery($ => {
 		$('#LoginModal').modal('hide');
 		let jqxhr = $.post("../barchart-test/api/index.php/stocks/login", $('form[name=login]').serialize()).done(data => {
 
-			//create_cookie(data.stCokiName, data.stCokiVal, 5, '/');
 			if (data === null) {
 				$('#LoginModal i').html("Login Error: Check Username and Password");
 				$('#LoginModal').modal('show');
 			}
 		}).fail(() => {
-			$('#stockFeeds').html("Server Error");
+			$('#stockFeeds').html("Server Error Connection may not have been established");
 		}).always(data => {
 			let dataJSON = JSON.parse(data);
 			create_cookie(dataJSON['stCokiName'], dataJSON['stCokiVal'], 5, '/');
-			sortData.populate(dataJSON); //populates the sorter with our new data from the database
-			sortData.display(); //This popoerly
+			sortData.populate(dataJSON['stocks']); //populates the sorter with our new data from the database
+			sortData.display(); //Display Data Using previous settings
 		});
 	});
 
 	$('form[name=stocks]').submit(e => {
 		e.preventDefault();
 		let jqxhr = $.post('../barchart-test/api/index.php/stocks/add', { "hash": cookie, "stockSymbol": $('input[name=stockSymbol').val() }).done().fail(() => {
-			$('#stockFeeds').html("Server Error");
+			$('#stockFeeds').html("Server Error Connection may not have been established");
 		}).always(data => {
 			if (data === "not added") {
 				$('#message').text('"' + $('input[name=stockSymbol').val() + '" has already been added to your watchlist');
 			} else {
 				let dataJSON = JSON.parse(data);
 				sortData.populate(dataJSON); //populates the sorter with our new data from the database
-				sortData.display(); //This popoerly
+				sortData.display(); // Display Data Using previous settings
 			}
 			$('#inlineFormInput').val("");
 		});
@@ -256,11 +268,26 @@ jQuery($ => {
 		let link = e.currentTarget.href,
 		    symbol = link.split("="),
 		    jqxhr = $.post('../barchart-test/api/index.php/stocks/delete', { "hash": cookie, "stockSymbol": symbol[1] }).done().fail(() => {
-			$('#stockFeeds').html("Server Error");
+			$('#stockFeeds').html("Server Error Connection may not have been established");
 		}).always(data => {
 			let dataJSON = JSON.parse(data);
-			sortData.populate(dataJSON);
-			sortData.display();
+			sortData.populate(dataJSON); //populates the sorter with our new data from the database
+			sortData.display(); // Display Data Using previous settings
 		});
 	});
+
+	function checkOrder(field) {
+		//Check closure to see if we what order we are displaying our data
+
+		let StartStatus = sortData.status();
+		if (field === null) {
+			field = StartStatus[1];
+		}
+		//console.log(StartStatus);
+		if (StartStatus[0] === "acend") {
+			$("#stockFeeds #" + field + "Arow").addClass("fa fa-chevron-circle-up");
+		} else {
+			$("#stockFeeds #" + field + "Arow").addClass("fa fa-chevron-circle-down");
+		}
+	}
 });
